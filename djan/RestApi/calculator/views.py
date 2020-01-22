@@ -9,20 +9,19 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 # Create your views here.
 class cal(APIView):
+    
     permission_classes= [IsAuthenticated]
     authentication_classes=(TokenAuthentication,)
+    
     def get(self,request,num1,num2):
-        try:
             num1=int(num1)
-            num2=int(num2)
-        except ValueError:
-            return Response(status.HTTP_400_BAD_REQUEST)    
+            num2=int(num2)    
         try:
             p=calc.objects.get(operator="+",n1=num1,n2=num2)
             return Response("from database %s" % p.total)
         except calc.DoesNotExist:    
             p=calc(operator='+',n1=num1,n2=num2,total=num1+num2)
-            p.save()
+            p.save() 
         sum=num1+num2
         return Response(sum)
 
